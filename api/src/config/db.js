@@ -8,9 +8,7 @@ const connection = mysql.createPool({
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'francia',
     port: process.env.DB_PORT || 3306,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+    waitForConnections: true
 });
 
 // No es necesario llamar a connection.connect() cuando usas un pool
