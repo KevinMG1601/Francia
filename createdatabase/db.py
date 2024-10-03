@@ -72,7 +72,6 @@ def create_database_and_tables():
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS `users` (
       `id` INT AUTO_INCREMENT PRIMARY KEY,
-      `countryid` varchar(5) NOT NULL,
       `name` varchar(255),
       `user` varchar(255) NOT NULL,
       `password` varchar(255) NOT NULL

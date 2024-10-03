@@ -1,5 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
+import bcrypt
+
 
 # Conexión a MySQL
 def create_connection():
@@ -16,6 +18,13 @@ def create_connection():
     except Error as e:
         print(f"Error: {e}")
         return None
+
+def hash_password(password):
+    """Función para hashear la contraseña usando bcrypt"""
+    salt = bcrypt.gensalt()  # Generar una sal segura
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)  # Hashear la contraseña
+    return hashed_password.decode('utf-8')  # Convertir a string para poder almacenarla en la base de datos
+
 
 # Insertar datos en la tabla system_country
 def insert_into_system_country(connection):
@@ -215,6 +224,26 @@ def insert_into_system_city(connection):
         print(f"Error al insertar en system_city: {e}")
     cursor.close()
 
+password_admin = hash_password('123')
+
+# Insertar datos en la tabla de usuarios
+def insert_into_users(connection):
+    cursor = connection.cursor()
+    password_admin = hash_password('123')  # Hashea la contraseña
+
+    query = """
+    INSERT INTO users (name, user, password)
+    VALUES (%s, %s, %s)
+    ON DUPLICATE KEY UPDATE password=VALUES(password);
+    """  # Se usa %s como marcador de posición
+    try:
+        cursor.execute(query, ('admin', 'admin', password_admin))  # Pasar los valores de forma segura
+        connection.commit()
+        print("Datos insertados en users")
+    except Error as e:
+        print(f"Error al insertar en users: {e}")
+    cursor.close()
+
 
 # Ejecutar las funciones
 if __name__ == "__main__":
@@ -223,4 +252,5 @@ if __name__ == "__main__":
         insert_into_system_country(connection)
         insert_into_system_state(connection)
         insert_into_system_city(connection)
+        insert_into_users(connection)
         connection.close()
