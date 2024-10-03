@@ -15,7 +15,7 @@ const registerUser = async (req, res) => {
 
         // Insertar el nuevo usuario en la base de datos
         const [result] = await connection.execute(
-            "INSERT INTO users (name, user, password) VALUES (?, ?, ?, ?)",
+            "INSERT INTO users (name, user, password) VALUES (?, ?, ?)",
             [ name, user, hashedPassword]
         );
 

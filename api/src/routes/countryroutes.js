@@ -2,8 +2,6 @@ const express = require('express');
 const countrycontroller = require('../controllers/countrycontroller');
 const authenticateToken = require('../middleware/jwt')
 
-
-
 const router = express.Router();
 
 router.get('/',authenticateToken,  countrycontroller.getcountries);
